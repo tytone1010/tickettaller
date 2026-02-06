@@ -8,86 +8,57 @@
 </head>
 
 <body>
-  <div class="ticket">
-    <header>
-      <img id="_qr" alt="QR del equipo" class="qr-header">
-      <br>
-      <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTLOGO.png" alt="TYT SYSTEMS" class="logo-full">
-    </header>
+<div class="ticket">
 
-    <section class="datos">
-      <p><strong>Fecha:</strong> <span id="FECHA_RECEPCION"></span></p>
-      <p><strong>ID Taller:</strong> <span id="IDxORDENPC"></span></p>
-      <hr>
+  <header>
+    <img id="_qr" alt="QR del equipo" class="qr-header" style="display:none;">
+    <br>
+    <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTLOGO.png" alt="TYT SYSTEMS" class="logo-full">
+  </header>
 
-      <div class="cliente-bloque">
-        <p class="cliente-label"><strong>Cliente:</strong></p>
-        <p id="NOMBRECLIENTE"></p>
-        <div class="cliente-tel">
-          <span id="TELCLIENTE"></span>
-        </div>
+  <section class="datos">
+    <p><strong>Fecha:</strong> <span id="FECHA_RECEPCION"></span></p>
+    <p><strong>ID Taller:</strong> <span id="IDxORDENPC"></span></p>
+    <hr>
+
+    <div class="cliente-bloque">
+      <p class="cliente-label"><strong>Cliente:</strong></p>
+      <p id="NOMBRECLIENTE"></p>
+      <div class="cliente-tel">
+        <span id="TELCLIENTE"></span>
       </div>
+    </div>
 
-      <p><strong>Dirección:</strong> <span id="DIRCLIENTE"></span></p>
-      <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
-    </section>
+    <p><strong>Dirección:</strong> <span id="DIRCLIENTE"></span></p>
+    <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
+  </section>
 
-    <section>
-      <h3>DETALLE DEL EQUIPO</h3>
-      <p id="pwInfo" style="display:none;"><strong>PW:</strong> <span id="CLAVE"></span> (<span id="GARANTIA"></span>)</p>
-      <p><strong>Equipo:</strong> <span id="EQUIPOX"></span></p>
-      <p><span id="MARCA"></span></p>
-      <p><strong>Información adicional:</strong> <span id="INFO2"></span></p>
-      <p><span id="INFO1"></span></p>
-    </section>
+  <section>
+    <h3>DETALLE DEL EQUIPO</h3>
+    <p id="pwInfo" style="display:none;">
+      <strong>PW:</strong> <span id="CLAVE"></span>
+      (<span id="GARANTIA"></span>)
+    </p>
+    <p><strong>Equipo:</strong> <span id="EQUIPOX"></span></p>
+    <p><span id="MARCA"></span></p>
+    <p><strong>Información adicional:</strong> <span id="INFO2"></span></p>
+    <p><span id="INFO1"></span></p>
+  </section>
 
-    <section>
-      <h3>SERVICIO REQUERIDO</h3>
-      <p><span id="SERVICIOREQUERIDO"></span></p>
+  <section>
+    <h3>SERVICIO REQUERIDO</h3>
+    <p><span id="SERVICIOREQUERIDO"></span></p>
 
-      <h3>TRABAJO REALIZADO</h3>
-      <p><span id="SERVICIOREALIZADO"></span></p>
-      <hr>
+    <h3>TRABAJO REALIZADO</h3>
+    <p><span id="SERVICIOREALIZADO"></span></p>
+    <hr>
 
-      <div class="estado-costo">
-        <span>Entrega: <strong><span id="ESTADO"></span></strong></span>
-        <span>Costo: L <strong><span id="COSTOLPS"></span></strong></span>
-      </div>
-      <hr>
-    </section>
+    <div class="estado-costo">
+      <span>Entrega: <strong><span id="ESTADO"></span></strong></span>
+      <span>Costo: L <strong><span id="COSTOLPS"></span></strong></span>
+    </div>
+    <hr>
+  </section>
 
-    <section id="seccionConforme">
-      <p><strong>Conforme:</strong></p>
-      <img id="CONFORME_IMG" alt="Firma de conformidad" class="firma" style="display:none;">
-      <p id="TEXTOCONFORME"></p>
-    </section>
-
-    <section class="whatsapp">
-      <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTWHA.png" alt="QR WhatsApp" class="qr-full">
-    </section>
-  </div>
-
-<script>
-/* =====================================================
-   CONFIG GENERAL
-===================================================== */
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-/* =====================================================
-   MODO NUEVO: URL CORTA (?id=)
-===================================================== */
-if (id) {
-  fetch("https://script.google.com/macros/s/AKfycbXXXX/exec?id=" + encodeURIComponent(id))
-    .then(r => r.json())
-    .then(data => {
-      if (!data || Object.keys(data).length === 0) return;
-
-      Object.keys(data).forEach(c => {
-        const el = document.getElementById(c);
-        if (el && data[c] !== null) {
-          if (c === "_qr") {
-            el.src = data[c];
-            el.style.display = "block";
-          } else if (c === "COSTOLPS") {
-            el.textContent = Number(data[c]).toFixed(2);
+  <section id="seccionConforme">
+    <p><strong>Conforme:</strong></

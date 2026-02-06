@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>TICKET TALLER TYT SYSTEMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://luisteruelhn.github.io/plantillaTICKETPC/style.css">
+</head>
+
+<body>
+  <div class="ticket">
+    <header>
+      <img id="_qr" alt="QR del equipo" class="qr-header">
+      <br> 
+      <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTLOGO.png" alt="TYT SYSTEMS" class="logo-full">
+    </header>
+    
+    <section class="datos">
+      <p><strong>Fecha:</strong> <span id="FECHA_RECEPCION"></span></p>
+      <p><strong>ID Taller:</strong> <span id="IDxORDENPC"></span></p>
+      <hr>
+<div class="cliente-bloque">
+  <p class="cliente-label"><strong>Cliente:</strong></p>
+  <p id="NOMBRECLIENTE"></p>
+  <div class="cliente-tel">
+    <span><strong></strong></span> <span id="TELCLIENTE"></span>
+  </div>
+</div>
+
+      
+      <p><strong>Dirección:</strong> <span id="DIRCLIENTE"></span></p>
+      <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
+     
+    </section>
+
+    <section>
+      <h3>DETALLE DEL EQUIPO</h3>
+      <p id="pwInfo" style="display:none;"><strong>PW:</strong> <span id="CLAVE"></span> (<span id="GARANTIA"></span>)</p>
+      <p><strong>Equipo:</strong> <span id="EQUIPOX"></span></p>
+      <p> <span id="MARCA"></span> </p>
+      
+      <p><strong>Información adicional:</strong> <span id="INFO2"></span></p>
+      <p><span id="INFO1"></span></p>
+     
+    </section>
+
+    <section>
+      <h3>SERVICIO REQUERIDO</h3>
+      <p><span id="SERVICIOREQUERIDO"></span></p>
+      <h3>TRABAJO REALIZADO</h3>
+      <p><span id="SERVICIOREALIZADO"></span></p>
+      <br>
+       <hr>      
+      <div class="estado-costo">
+        <span>Entrega:<strong><span id="ESTADO"></span></strong> </span>
+        <span>Costo:L<strong><span id="COSTOLPS"></span></strong> </span>
+      </div>
+      <hr>
+    </section>
+
+<section id="seccionConforme">
+  <p><strong>Conforme:</strong></p>
+  <img id="CONFORME_IMG" alt="Firma de conformidad" class="firma" style="display:none;">
+  <p id="TEXTOCONFORME"></p>
+</section>
+
+
+
+    <section class="whatsapp">
+    <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTWHA.png" alt="QR WhatsApp" class="qr-full">
+    </section>
+
+  
+  </div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const campos = [
+    "FECHA_RECEPCION","IDTALLERPC","IDxORDENPC",
+    "NOMBRECLIENTE","TELCLIENTE","DIRCLIENTE",
+    "RECIBIDO_POR","EQUIPOX","MARCA","INFO1","INFO2",
+    "SERVICIOREQUERIDO","SERVICIOREALIZADO",
+    "ESTADO","COSTOLPS","CONFORME","TEXTOCONFORME","_qr",
+    "CLAVE","GARANTIA"
+  ];
+
+  campos.forEach(c => {
+    const valor = params.get(c);
+    if (valor) {
+      const el = document.getElementById(c);
+      if (el) {
+        if (c === "_qr") {
+          // Cargar imagen QR dinámica
+          el.src = decodeURIComponent(valor);
+          el.alt = "QR del equipo";
+          el.style.display = "block";
+
+        } else if (c === "COSTOLPS") {
+          // 👉 Formatear costo con dos decimales
+          const num = parseFloat(valor);
+          if (!isNaN(num)) {
+            el.textContent = num.toFixed(2);
+          } else {
+            el.textContent = decodeURIComponent(valor);
+          }
+
+        } else {
+          let texto = decodeURIComponent(valor);
+
+          // 👉 Formatear número de teléfono (99 89-97 41)
+          if (c === "TELCLIENTE") {
+            const soloDigitos = texto.replace(/\D/g, "");
+            if (soloDigitos.length === 8) {
+              texto = `${soloDigitos.slice(0,2)} ${soloDigitos.slice(2,4)}-${soloDigitos.slice(4,6)} ${soloDigitos.slice(6)}`;
+            }
+
+            // Crear el ícono ✆ negro grande
+            const icono = document.createElement("span");
+            icono.innerHTML = "&#9990;&nbsp;"; // ✆ símbolo plano negro
+            icono.style.fontSize = "25px";
+            icono.style.color = "#000";
+            icono.style.marginRight = "3px";
+
+            el.textContent = "";
+            el.appendChild(icono);
+            el.appendChild(document.createTextNode(texto));
+
+          } else {
+            el.textContent = texto;
+          }
+        }
+      }
+    }
+  });
+
+  // --- Mostrar la firma (CONFORME) solo si existe ---
+  const firmaParam = params.get("CONFORME");
+  const imgFirma = document.getElementById("CONFORME_IMG");
+  if (imgFirma) {
+    if (firmaParam && firmaParam.trim() !== "") {
+      let firmaURL = decodeURIComponent(firmaParam);
+
+      // Si la URL es una ruta interna de AppSheet, convertirla en una URL pública
+      if (firmaURL.startsWith("PC_Images/") || firmaURL.startsWith("IMPRESORAS_Images/")) {
+        let tabla = firmaURL.startsWith("IMPRESORAS_Images/") ? "IMPRESORAS" : "PC";
+        firmaURL =
+          "https://www.appsheet.com/template/gettablefileurl?" +
+          "appName=TYTOneDBA-909404411" +
+          "&tableName=" + tabla +
+          "&fileName=" + encodeURIComponent(firmaURL);
+      }
+
+      imgFirma.src = firmaURL;
+      imgFirma.style.display = "block";
+    } else {
+      imgFirma.style.display = "none";
+    }
+  }
+
+  // --- Control de modo de impresión (para ticket corto) ---
+  const modo = params.get("modo");
+  if (modo === "corto") {
+    const ocultar = [
+      "SERVICIOREALIZADO",
+      "CONFORME_IMG",
+      "TEXTOCONFORME",
+      "seccionConforme",
+      "qr-full"
+    ];
+    ocultar.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+    const pie = document.querySelector(".whatsapp");
+    if (pie) pie.style.display = "none";
+  }
+
+  // --- Mostrar PW y Garantía ---
+  const pwInfo = document.getElementById("pwInfo");
+  if (pwInfo) pwInfo.style.display = "block";
+
+  // --- 🖨️ Control de impresión (solo si print=1) ---
+  window.addEventListener("load", () => {
+    const printMode = params.get("print"); // ← nuevo parámetro
+    if (printMode === "1") {
+      setTimeout(() => {
+        try {
+          const esAndroid = /Android/i.test(navigator.userAgent);
+          if (esAndroid) {
+            // Intentar abrir RawBT
+            const rawbtIntent = "intent://print/#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = rawbtIntent;
+            document.body.appendChild(iframe);
+
+            // Si RawBT no responde, usar impresión normal
+            setTimeout(() => window.print(), 1500);
+          } else {
+            // En PC o iOS, usar impresión normal
+            window.print();
+          }
+        } catch (err) {
+          console.error("Error al imprimir:", err);
+          window.print(); // fallback garantizado
+        }
+      }, 1000); // esperar para cargar imágenes y QR
+    }
+  });
+</script>
+
+
+
+
+
+
+</body>
+</html>

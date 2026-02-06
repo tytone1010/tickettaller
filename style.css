@@ -1,0 +1,285 @@
+/* Estado y Costo en una sola línea compacta */
+.estado-costo {
+  display: flex;
+  justify-content: space-between; /* Estado izquierda, Costo derecha */
+  align-items: center;
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  line-height: 1.1;
+}
+
+.estado-costo span {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+#ESTADO, #COSTOLPS {
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/* =============================
+   BLOQUE CLIENTE
+   ============================= */
+
+/* Bloque general */
+.cliente-bloque {
+  margin: 4px 0 8px 0; /* reducido */
+}
+
+/* Etiqueta "Cliente:" */
+.cliente-label {
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+/* Línea del teléfono con dos extremos (izquierda-derecha) */
+.cliente-datos {
+  display: flex;
+  justify-content: space-between;  /* separa “Tel:” y el número */
+  align-items: center;
+}
+
+/* Etiqueta y número */
+.cliente-datos span {
+  font-size: 15px;
+  font-weight: bold;
+  color: #000;
+}
+.cliente-tel {
+  display: flex;
+  justify-content: flex-end;  /* 👉 Alinea a la derecha */
+  align-items: baseline;
+  gap: 3px;                   /* pequeña separación entre “Tel:” y número */
+  margin: 0;
+  padding: 0;
+  line-height: 1.1;
+}
+.cliente-tel strong {
+  font-size: 15px;
+  font-weight: bold;
+  color: #000;
+}
+/* Aumentar tamaño del nombre y teléfono */
+#TELCLIENTE {
+  font-size: 25px;
+  font-weight: bold;
+  color: #000;
+  line-height: 1; /* más compacto */
+  display: block;
+  text-align: right;  
+  margin: 0;
+}
+
+#NOMBRECLIENTE {
+  display: block;
+  text-align: right;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #000;
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* =============================
+   SECCIÓN FIRMA
+   ============================= */
+#seccionConforme {
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* Texto "Conforme:" centrado */
+#seccionConforme p strong {
+  display: inline-block;
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+/* Imagen de firma */
+.firma {
+  max-width: 45%;
+  height: auto !important;
+  display: block;
+  margin: 4px auto;
+  border: 1px solid #999;
+  border-radius: 4px;
+  padding: 2px;
+  background: #fff;
+  object-fit: contain;
+}
+
+/* Texto de textoConforme */
+#TEXTOCONFORME {
+  text-align: justify;
+  font-size: 11px;
+  margin-top: 2px;
+  line-height: 1.1;
+}
+
+/* =============================
+   QR HEADER
+   ============================= */
+.qr-header {
+  width: 85px;
+  height: auto;
+  display: block;
+  margin: 2px auto 0 auto;
+}
+
+.qr-label {
+  text-align: center;
+  font-size: 11px;
+  margin: 0;
+  padding: 0;
+}
+
+/* QR con texto integrado (imagen completa) */
+.qr-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 4px auto 0 auto;
+}
+
+/* =============================
+   ESTRUCTURA GENERAL
+   ============================= */
+body {
+  font-family: "Arial", sans-serif;
+  background: #fff;
+  color: #000;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.ticket {
+  background: #fff;
+  width: 80mm;
+  padding: 4px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+header {
+  margin: 0;
+  padding: 0;
+}
+
+.logo-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+}
+
+/* =============================
+   TEXTOS Y TITULOS
+   ============================= */
+h3 {
+  background: #000;
+  color: #fff;
+  font-size: 13px;
+  padding: 2px 3px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+p {
+  font-size: 13px;
+  margin: 1px 0;
+  line-height: 1.1;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #000;
+  margin: 2px 0;
+}
+
+/* =============================
+   PIE DE WHATSAPP / QR FINAL
+   ============================= */
+.whatsapp {
+  text-align: center;
+  margin-top: 6px;
+}
+
+.qr {
+  width: 80px;
+  height: 80px;
+}
+
+.num {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+/* =============================
+   ESTADO + COSTO PEGADOS
+   ============================= */
+.estado-costo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+}
+
+#ESTADO, #COSTOLPS {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+
+/* =============================
+   CORRECCIÓN DE IMPRESIÓN
+   ============================= */
+@media print {
+  /* fuerza a que se impriman colores de fondo */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* mejora contraste general en papel térmico */
+  body, p, span, td, div {
+    font-weight: 600 !important;
+  }
+
+  /* hace que los títulos negros sí impriman el fondo */
+  h3 {
+    background: #000 !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    padding: 3px;
+  }
+
+  /* Evita que Chrome quite el negro de fondo */
+  .ticket {
+    background: #fff !important;
+  }
+
+  /* Mantener texto nítido en impresoras térmicas */
+  p, span, td {
+    -webkit-font-smoothing: none !important;
+    font-smooth: never !important;
+  }
+}

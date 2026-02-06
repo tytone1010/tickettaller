@@ -94,4 +94,99 @@ function parsePrice(number) {
 	return number.toFixed(2).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1,');
 }
 
-/* Update Num*
+/* Update Number
+/* ========================================================================== */
+
+function updateNumber(e) {
+	if (esModoAppSheet()) return;
+
+	var
+	activeElement = document.activeElement,
+	value = parseFloat(activeElement.innerHTML),
+	wasPrice = activeElement.innerHTML == parsePrice(parseFloatHTML(activeElement));
+
+	if (!isNaN(value) && (e.keyCode == 38 || e.keyCode == 40 || e.wheelDeltaY)) {
+		e.preventDefault();
+
+		value += e.keyCode == 38 ? 1 : e.keyCode == 40 ? -1 : Math.round(e.wheelDelta * 0.025);
+		value = Math.max(value, 0);
+
+		activeElement.innerHTML = wasPrice ? parsePrice(value) : value;
+	}
+
+	updateInvoice();
+}
+
+/* Update Invoice
+/* ========================================================================== */
+
+function updateInvoice() {
+	if (esModoAppSheet()) return;
+
+	var total = 0;
+	var cells, price, a, i;
+
+	for (a = document.querySelectorAll('table.inventory tbody tr'), i = 0; a[i]; ++i) {
+		cells = a[i].querySelectorAll('span:last-child');
+		price = parseFloatHTML(cells[2]) * parseFloatHTML(cells[3]);
+		total += price;
+		cells[4].innerHTML = parsePrice(price);
+	}
+
+	cells = document.querySelectorAll('table.balance td:last-child span:last-child');
+	if (cells.length > 0) cells[0].innerHTML = parsePrice(total);
+}
+
+/* On Content Load
+/* ========================================================================== */
+
+function onContentLoad() {
+
+	/* 🔒 MODO APPSHEET: SOLO LECTURA */
+	if (esModoAppSheet()) {
+
+		// quitar edición
+		document.querySelectorAll('[contenteditable]').forEach(el => {
+			el.removeAttribute('contenteditable');
+		});
+
+		// ocultar botones
+		document.querySelectorAll('.cut,.add').forEach(el => {
+			el.style.display = 'none';
+		});
+
+		return; // ⛔ no activar eventos
+	}
+
+	/* ✏️ MODO PLANTILLA EDITABLE */
+	updateInvoice();
+
+	var input = document.querySelector('input'),
+		image = document.querySelector('img');
+
+	if (window.addEventListener) {
+		document.addEventListener('click', function (e) {
+			var element = e.target.querySelector('[contenteditable]'), row;
+
+			element && e.target != document.documentElement && e.target != document.body && element.focus();
+
+			if (e.target.matchesSelector('.add')) {
+				var newRow = generateTableRow();
+				if (newRow) document.querySelector('table.inventory tbody').appendChild(newRow);
+			}
+			else if (e.target.className == 'cut') {
+				row = e.target.ancestorQuerySelector('tr');
+				row && row.parentNode.removeChild(row);
+			}
+
+			updateInvoice();
+		});
+
+		document.addEventListener('mousewheel', updateNumber);
+		document.addEventListener('keydown', updateNumber);
+		document.addEventListener('keydown', updateInvoice);
+		document.addEventListener('keyup', updateInvoice);
+	}
+}
+
+window.addEventListener && document.addEventListener('DOMContentLoaded', onContentLoad);
